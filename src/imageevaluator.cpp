@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QDate>
 #include <QTextStream>
+#include <QDebug>
+
 #include <opencv/cv.h>
 #include <caib/imgproc.h>
 
@@ -20,36 +22,43 @@ void ImageEvaluator::evaluateImages(const QString &srcDirPath, const QString &bi
 
     foreach(srcFileName, srcFileList) {
         foreach(binFileName, binFileList) {
-            if(binFileName.contains(srcFileName.split("." + srcfilter).first()))
+            if( srcFileName.split("." + srcfilter).first().compare( binFileName.split("." + binfilter).first() ) == 0 ){
                 evaluateImage(srcDirPath + "/" + srcFileName, binDirPath + "/" + binFileName, resultFilePath);
+            }
         }
     }
 }
 
 void ImageEvaluator::evaluateImage(const QString &srcImgPath, const QString &binImgPath, const QString &resultFilePath)
 {
-    cv::Mat srcImg = cv::imread(srcImgPath.toStdString(), cv::IMREAD_COLOR);
-    cv::Mat binImg = cv::imread(binImgPath.toStdString(), cv::IMREAD_COLOR);
+    cv::Mat srcImg = cv::imread(srcImgPath.toStdString(), cv::IMREAD_GRAYSCALE);
+    cv::Mat binImg = cv::imread(binImgPath.toStdString(), cv::IMREAD_GRAYSCALE);
 
     Q_ASSERT(srcImg.data && binImg.data);
 
-    srcImg = caib::morphBinary(srcImg, 100);
-    binImg = caib::morphBinary(binImg, 100);
+    srcImg = caib::morphNeg(caib::morphBinary(srcImg, 100));
+    binImg = caib::morphNeg(caib::morphBinary(binImg, 100));
 
+    bool exist;
+    if ((exist = QFileInfo(resultFilePath).exists())) {
+        Q_ASSERT(!QFileInfo(resultFilePath).isDir());
+    } else {
+
+    }
     QFile savingFile(resultFilePath);
     savingFile.open( QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
     QTextStream outStream(&savingFile);
 
-    outStream << "Image" << "\t" << srcImgPath.split("/").last();
-    outStream << "Evaluation Date" << "\t" << QDate::currentDate().toString() << "\n";
-    outStream << "Area Overlap" << "\t" << "Area Similarity" << "\t" << "Overlap Error"
+    if (!exist) {
+    outStream << "Image" << "\t" <<"Area Overlap" << "\t" << "Area Similarity" << "\t" << "Overlap Error"
               << "\t" << "Sensivity" << "\t" << "FP" << "\t" << "TP" << "\t" << "FN" << "\n";
+    }
 
+    cv::Mat TP_only_img = caib::morphInfrec(caib::morphIntersec(binImg, srcImg), srcImg);
+    cv::Mat TP_only_bin = caib::morphInfrec(caib::morphIntersec(binImg, srcImg), binImg);
 
-    cv::Mat TP_only_img = caib::morphInfrec(caib::morphIntersec(caib::morphNeg(binImg), srcImg), srcImg);
-    cv::Mat TP_only_bin = caib::morphInfrec(caib::morphIntersec(caib::morphNeg(binImg), srcImg), caib::morphNeg(binImg));
-
+    outStream <<  srcImgPath.split("/").last() << "\t";
     outStream << caib::areaOverlap(TP_only_bin, TP_only_img) << "\t";
     outStream << caib::areaSimilarity(TP_only_bin, TP_only_img) << "\t";
     outStream << caib::overlapError(TP_only_bin, TP_only_img) << "\t";

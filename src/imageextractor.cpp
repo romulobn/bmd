@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QDate>
 #include <QTextStream>
+#include <QFileInfo>
+#include <QDebug>
 
 ImageExtractor::ImageExtractor()
 {
@@ -11,22 +13,21 @@ ImageExtractor::ImageExtractor()
 
 void ImageExtractor::measureImages(const QString &srcDirPath, const QString &destFilePath, const QString &filter, float scale)
 {
-    Q_ASSERT(QDir(srcDirPath).exists() && QDir(destFilePath).exists());
+    Q_ASSERT(QDir(srcDirPath).exists() && (QFileInfo(destFilePath).isFile() || !QFileInfo(destFilePath).exists()));
     QStringList fileList = getFileList(srcDirPath, filter);
     QString fileName;
 
     foreach (fileName, fileList) {
-        measureImage(srcDirPath + fileName, destFilePath, scale);
+        measureImage(srcDirPath + "/"+ fileName, destFilePath, scale);
     }
 }
 
 void ImageExtractor::measureImage(const QString &srcImgPath, const QString &destFilePath, float scale)
 {
     cv::Mat input = cv::imread(srcImgPath.toStdString(), cv::IMREAD_GRAYSCALE);
-
     Q_ASSERT(input.data);
 
-    input = caib::morphBinary(input);
+    input = caib::morphNeg(caib::morphBinary(input,100));
 
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
@@ -48,6 +49,7 @@ void ImageExtractor::measureImage(const QString &srcImgPath, const QString &dest
             }
         }
     }
+
 
     QFile savingFile(destFilePath);
     savingFile.open( QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
