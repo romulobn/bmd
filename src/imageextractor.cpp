@@ -11,10 +11,10 @@ ImageExtractor::ImageExtractor()
 
 }
 
-void ImageExtractor::measureImages(const QString &srcDirPath, const QString &destFilePath, const QString &filter, float scale)
+void ImageExtractor::measureImages(const QString &srcDirPath, const QString &destFilePath, const QStringList &filters, float scale)
 {
     Q_ASSERT(QDir(srcDirPath).exists() && (QFileInfo(destFilePath).isFile() || !QFileInfo(destFilePath).exists()));
-    QStringList fileList = getFileList(srcDirPath, filter);
+    QStringList fileList = getFileList(srcDirPath, filters);
     QString fileName;
 
     foreach (fileName, fileList) {
@@ -35,35 +35,54 @@ void ImageExtractor::measureImage(const QString &srcImgPath, const QString &dest
 
     QList<double> axon_area, axon_diam, fiber_area, fiber_diam, ratio_g;
 
-    for (int i=0; !(i<0); i = hierarchy[i][0]) {
+    for (int i=0; !(i<0) && (i < hierarchy.size()); i = hierarchy[i][0]) {
         if (hierarchy[i][2] > -1) {
-            if ( caib::getMinCalliper(contours[hierarchy[i][2]]) / caib::getMinCalliper(contours[i]) <= 1.0) {
+            int childIdx = hierarchy[i][2], maxChildIdx = 0;
+            double maxArea = 0;
 
-               axon_area.append(cv::contourArea(contours[hierarchy[i][2]]) * scale * scale);
-               axon_diam.append(caib::getMinCalliper(contours[hierarchy[i][2]]) * scale);
+
+            while( childIdx != -1 ) {
+                if(hierarchy[childIdx][3] != i)
+                    break;
+                if(cv::contourArea(contours[childIdx]) > maxArea) {
+                    maxChildIdx = childIdx;
+                    maxArea = cv::contourArea(contours[childIdx]);
+                }
+
+                childIdx = hierarchy[childIdx][0];
+            }
+
+            if ( caib::getMinCalliper(contours[maxChildIdx]) / caib::getMinCalliper(contours[i]) <= 1.0) {
+
+               axon_area.append(cv::contourArea(contours[maxChildIdx]) * scale * scale);
+               axon_diam.append(caib::getMinCalliper(contours[maxChildIdx]) * scale);
                fiber_area.append(cv::contourArea(contours[i]) * scale * scale);
                fiber_diam.append(caib::getMinCalliper(contours[i]) * scale);
 
-               ratio_g.append(caib::getMinCalliper(contours[hierarchy[i][2]]) / caib::getMinCalliper(contours[i]));
+               ratio_g.append(caib::getMinCalliper(contours[maxChildIdx]) / caib::getMinCalliper(contours[i]));
 
             }
         }
     }
 
+    bool writeHeader = true;
+
+    if(QFileInfo(destFilePath).exists()) {
+        writeHeader = false;
+    }
 
     QFile savingFile(destFilePath);
     savingFile.open( QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
     QTextStream outStream(&savingFile);
 
-    outStream << "Image" << "\t" << destFilePath.split("/").last();
-    outStream << "Extraction Date" << "\t" << QDate::currentDate().toString();
-    outStream << "Axon Area" << "\t" << "Axon Diameter" << "\t" << "Fiber Area" << "\t" << "Fiber Diameter" << "\t" << "Ratio G" << "\n";
 
+    if( writeHeader )
+        outStream << "Axon Area" << "," << "Axon Diameter" << "," << "Fiber Area" << "," << "Fiber Diameter" << "," << "Ratio G" << "\n";
 
     while( !axon_area.empty() && !axon_diam.empty() && !fiber_area.empty() && !fiber_diam.empty() && !ratio_g.empty()) {
 
-        outStream << axon_area.first() << "\t" << axon_diam.first() << "\t"  << "\t" << fiber_area.first() << "\t" << fiber_diam.first() << "\t" << ratio_g.first() << "\n";
+        outStream << axon_area.first() << "," << axon_diam.first() << ","  << fiber_area.first() << "," << fiber_diam.first() << "," << ratio_g.first() << "\n";
 
         axon_area.pop_front();
         axon_diam.pop_front();
@@ -77,7 +96,7 @@ void ImageExtractor::measureImage(const QString &srcImgPath, const QString &dest
 
 }
 
-QStringList ImageExtractor::getFileList(const QString &srcDir, const QString &filter)
+QStringList ImageExtractor::getFileList(const QString &srcDir, const QStringList &filters)
 {
     QDir dir(srcDir);
 
@@ -85,9 +104,11 @@ QStringList ImageExtractor::getFileList(const QString &srcDir, const QString &fi
     QString fileName;
     foreach(fileName, fileList)
     {
-        if(fileName.endsWith( "." + filter))
-        {
-           outputList.append(fileName);
+        foreach(QString filter, filters) {
+            if(fileName.endsWith( "." + filter, Qt::CaseInsensitive))
+            {
+               outputList.append(fileName);
+            }
         }
     }
 

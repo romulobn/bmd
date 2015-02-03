@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    ImageProcessor imp (ImageProcessor::SaveSteps || ImageProcessor::SaveFinalImage);
+    ImageProcessor imp;
 
     QStringList args;
 
@@ -19,12 +19,26 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    if ( args[4] == "lar")
-       imp.processImages(args[1], args[2], args[3], ImageProcessor::Laryngeal, ImageProcessor::Morph);
+    QStringList filters;
+    int nerve, pipeline;
+    filters << "jpg" << "jpeg" << "tif" << "tiff" << "bmp";
 
-    if ( args[4] == "ves")
-        imp.processImages(args[1], args[2], args[3], ImageProcessor::Vestibulochoclear, ImageProcessor::Morph);
 
-    if ( args[4] == "sur")
-        imp.processImages(args[1], args[2], args[3], ImageProcessor::Sural, ImageProcessor::Morph);
+    if(args[3] == "lar")
+        nerve = ImageProcessor::Laryngeal;
+    if(args[3] == "ves")
+        nerve = ImageProcessor::Vestibulochoclear;
+    if(args[3] == "sur")
+        nerve = ImageProcessor::Sural;
+    if(args[3] == "vag")
+        nerve = ImageProcessor::Vagus;
+    if(args[3] == "fre")
+        nerve = ImageProcessor::Frenic;
+
+    if(args[4] == "color")
+        pipeline = ImageProcessor::Color;
+    if(args[4] == "morph")
+        pipeline = ImageProcessor::Morph;
+
+    imp.processImages(args[1], args[2], filters, nerve, pipeline);
 }
