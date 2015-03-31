@@ -155,6 +155,8 @@ cv::Mat ImageProcessor::segmentMyelinSheaths(const cv::Mat &input)
         for (int x=0; x<input.cols; x++) {
             for (int y=0; y<input.rows; y++) {
                 final_img.at<cv::Vec6f>(cv::Point(x,y)) = cv::Vec6f(luv_img.at<cv::Vec3f>(cv::Point(x,y))[0]/100, xyz_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[0], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]);
+                //final_img.at<cv::Vec6f>(cv::Point(x,y)) = cv::Vec6f(bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]);
+
             }
         }
 
@@ -172,6 +174,7 @@ cv::Mat ImageProcessor::segmentMyelinSheaths(const cv::Mat &input)
         for (int x = 0; x < final_img.cols; x++) {
             for(int y = 0; y < final_img.rows; y++) {
                 centroids[labels.at<int>( cv::Point(x,y) )] += cv::Vec6f(luv_img.at<cv::Vec3f>(cv::Point(x,y))[0]/100, xyz_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[0], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]);
+                //centroids[labels.at<int>( cv::Point(x,y) )] += cv::Vec6f(bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]);
                 counts[labels.at<int>( cv::Point(x,y) )]++;
             }
         }
@@ -184,6 +187,7 @@ cv::Mat ImageProcessor::segmentMyelinSheaths(const cv::Mat &input)
             for(int y = 0; y < final_img.rows; y++) {
                 cv::Vec6f temp;
                 cv::pow(cv::Vec6f(luv_img.at<cv::Vec3f>(cv::Point(x,y))[0]/100, xyz_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[0], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]) - centroids[labels.at<int>( cv::Point(x,y) )], 2, temp);
+                //cv::pow(cv::Vec6f(bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[0], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]) - centroids[labels.at<int>( cv::Point(x,y) )], 2, temp);
                 var[labels.at<int>( cv::Point(x,y) )] += temp;
             }
         }

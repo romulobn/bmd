@@ -22,8 +22,8 @@ void ImageEvaluator::evaluateImages(const QString &srcDirPath, const QString &bi
 
     foreach(srcFileName, srcFileList) {
         foreach(binFileName, binFileList) {
-            if( srcFileName.split(".").first().compare( binFileName.split(".").first(), Qt::CaseInsensitive) == 0 ){
-                qDebug() << srcFileName << " " << binFileName;
+            if( srcFileName.split(".").first().compare( binFileName.split(".").first().replace("B", ""), Qt::CaseInsensitive) == 0 ){
+                qDebug() << srcFileName << " " << binFileName << " " ;
                 evaluateImage(srcDirPath + "/" + srcFileName, binDirPath + "/" + binFileName, resultFilePath);
             }
         }
