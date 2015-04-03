@@ -9,6 +9,8 @@ function processimages {
     color_file=$dir'/feat_color.csv'
     eval_morph_file=$dir'/eval_morph.csv'
     eval_color_file=$dir'/eval_color.csv'
+    rm -r $color_dir
+    rm -r $morph_dir
     mkdir $color_dir
     mkdir $morph_dir
 	./segment $dir $morph_dir $2 morph
