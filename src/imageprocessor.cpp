@@ -49,11 +49,11 @@ void ImageProcessor::processImage(const QString &srcImgPath, const QString &dest
         closestCenter = cv::Vec6f(0, 0, 0, 0, 0, 0);
         break;
     case Vestibulochoclear:
-        clusterNumber = 4;
+        clusterNumber = 5;
         eleToClose = 1;
         eleToOpen = 1;
-        eleSize = 14;
-        threshSize = 19;
+        eleSize = 10;
+        threshSize = 25;
         learningRate = 0.005;
         closestCenter = cv::Vec6f(0, 0, 0, 0, 0, 0);
         break;

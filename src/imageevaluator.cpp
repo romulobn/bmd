@@ -120,9 +120,9 @@ void ImageEvaluator:: measureImagePixelIntesityValues(const QString &srcImgPath,
             cv::Vec6f vec = cv::Vec6f(luv_img.at<cv::Vec3f>(cv::Point(x,y))[0], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[1], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[1], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[0], xyz_img.at<cv::Vec3f>(cv::Point(x,y))[2], bgr_img.at<cv::Vec3f>(cv::Point(x,y))[2]);
             
             if(binImg.at<uchar>(cv::Point(x,y))) {
-                outStream << "nonaxon" << "\n";
+                outStream << "nonaxon" << ",";
             } else {
-                outStream << "axon" << "\n";
+                outStream << "axon" << ",";
             }
             
             outStream << vec[0] << ",";

@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
     int nerve, pipeline;
     filters << "jpg" << "jpeg" << "tif" << "tiff" << "bmp";
 
+    qDebug() << args[3];
+    qDebug() << args[4];
 
     if(args[3] == "lar")
         nerve = ImageProcessor::Laryngeal;
