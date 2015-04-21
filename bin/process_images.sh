@@ -23,6 +23,8 @@ function processimages {
     Rscript gen_histograms.R $morph_file $morph_dir
 }
 
+mv ../segment/build/Debug/segment ./segment
+
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/623 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/bin fre
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/624 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/bin fre
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/625 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semDDcontrole/bin fre
@@ -110,5 +112,12 @@ function processimages {
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/047 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/bin fre
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/048 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/bin fre
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/049 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/bin fre
+#
+#processimages /Users/romulobourget/Dropbox/Images/Vestibulo/src /Users/romulobourget/Dropbox/Images/Vestibulo/bin ves
+#processimages /Users/romulobourget/Dropbox/Images/Laryngeal/src /Users/romulobourget/Dropbox/Images/Laryngeal/bin lar
+processimages /Users/romulobourget/Dropbox/Images/Vagus/src /Users/romulobourget/Dropbox/Images/Vagus/bin vag
 
-processimages /Users/romulobourget/Dropbox/Images/Vestibulo/src /Users/romulobourget/Dropbox/Images/Vestibulo/bin ves
+
+
+
+

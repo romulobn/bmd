@@ -76,11 +76,11 @@ void ImageProcessor::processImage(const QString &srcImgPath, const QString &dest
         closestCenter = cv::Vec6f(4.27530502/100, 0.036062041, 0.030824848, 0.0414256, 0.080060492, 0.038893232);
         break;
     case Vagus:
-        clusterNumber = 4;
+        clusterNumber = 3;
         eleToClose = 1;
         eleToOpen = 1;
-        eleSize = 10;
-        threshSize = 25;
+        eleSize = 12;
+        threshSize = 19;
         learningRate = 0.005;
         closestCenter = cv::Vec6f(0, 0, 0, 0, 0, 0);
         break;
