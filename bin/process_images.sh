@@ -11,6 +11,10 @@ function processimages {
     eval_color_file=$dir'/eval_color.csv'
     rm -r $morph_dir
     rm -r $color_dir
+    rm $color_file
+    rm $morph_file
+    rm $eval_morph_file
+    rm $eval_color_file
     mkdir $color_dir
     mkdir $morph_dir
 	./segment $dir $morph_dir $3 morph
@@ -114,8 +118,8 @@ mv ../segment/build/Debug/segment ./segment
 #processimages /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/049 /Users/romulobourget/Dropbox/Images/Frenic/original/Frenicos12semPEinsulina/bin fre
 #
 #processimages /Users/romulobourget/Dropbox/Images/Vestibulo/src /Users/romulobourget/Dropbox/Images/Vestibulo/bin ves
-#processimages /Users/romulobourget/Dropbox/Images/Laryngeal/src /Users/romulobourget/Dropbox/Images/Laryngeal/bin lar
-processimages /Users/romulobourget/Dropbox/Images/Vagus/src /Users/romulobourget/Dropbox/Images/Vagus/bin vag
+processimages /Users/romulobourget/Dropbox/Images/Laryngeal/src /Users/romulobourget/Dropbox/Images/Laryngeal/bin lar
+#processimages /Users/romulobourget/Dropbox/Images/Vagus/src /Users/romulobourget/Dropbox/Images/Vagus/bin vag
 
 
 

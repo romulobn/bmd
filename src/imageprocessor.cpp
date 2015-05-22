@@ -41,8 +41,8 @@ void ImageProcessor::processImage(const QString &srcImgPath, const QString &dest
     switch (nerve) {
     case Laryngeal:
         clusterNumber = 4;
-        eleToClose = 2;
-        eleToOpen = 2;
+        eleToClose = 1.9;
+        eleToOpen = 1.9;
         eleSize = 18;
         threshSize = 19;
         learningRate = 0.005;
