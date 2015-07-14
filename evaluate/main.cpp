@@ -47,4 +47,6 @@ int main(int argc, char *argv[])
     } else if(evaluationType == "pxl") {
         ImageEvaluator().measureImagesPixelIntesityValues(sourceDirectory, binaryDirectory, filters, outputFile);
     }
+    
+    return 0;
 }

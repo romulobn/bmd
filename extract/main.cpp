@@ -45,4 +45,6 @@ int main(int argc, char *argv[])
     QString sourceDirectory = parser.value(sourceDirectoryOption);
 
     ImageExtractor().measureImages(sourceDirectory, outputFile, QStringList() << "jpg" << "jpeg" << "tif" << "tiff" << "bmp", scale);
+    
+    return 0;
 }
