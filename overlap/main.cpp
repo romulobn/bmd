@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     if(!parser.isSet(outputFileOption) || !parser.isSet(sourceFile1Option) || !parser.isSet(sourceFile2Option))
     {
         parser.showHelp();
-        return -1;
+        return 1;
     }
     
     QString outputFile = parser.value(outputFileOption);

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     if(!parser.isSet(targetDirectoryOption) || !parser.isSet(sourceDirectoryOption) || !parser.isSet(nerveTypeOption) || !parser.isSet(pipelineTypeOption))
     {
         parser.showHelp();
-        return -1;
+        return 1;
     }
     
     QString targetDirectory = parser.value(targetDirectoryOption);

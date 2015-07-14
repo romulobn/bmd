@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     if( !parser.isSet(outputFileOption) || !parser.isSet(sourceDirectoryOption) )
     {
         parser.showHelp();
-        return -1;
+        return 1;
     }
     
     float scale = 0.123636;

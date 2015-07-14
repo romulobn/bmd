@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     
     if (!parser.isSet(binaryDirectoryOption) || !parser.isSet(outputFileOption) || !parser.isSet(sourceDirectoryOption) || !parser.isSet(evaluationTypeOption)) {
         parser.showHelp();
-        return -1;
+        return 1;
     }
     
     QString binaryDirectory = parser.value(binaryDirectoryOption);
