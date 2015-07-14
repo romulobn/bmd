@@ -31,7 +31,8 @@ int main(int argc, char *argv[])
     
     parser.process(app);
     
-    if(!parser.isSet(targetDirectoryOption) || !parser.isSet(sourceDirectoryOption) || !parser.isSet(nerveTypeOption) || !parser.isSet(pipelineTypeOption)) {
+    if(!parser.isSet(targetDirectoryOption) || !parser.isSet(sourceDirectoryOption) || !parser.isSet(nerveTypeOption) || !parser.isSet(pipelineTypeOption))
+    {
         parser.showHelp();
         return -1;
     }
